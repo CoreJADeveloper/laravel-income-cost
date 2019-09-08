@@ -24,6 +24,8 @@ class CreateCustomerEntitiesTable extends Migration
             $table->string('payment_type')->nullable();
             $table->integer('total_price')->nullable();
             $table->integer('commission')->nullable();
+            $table->string('comment')->nullable();
+            $table->string('source')->nullable();
             $table->integer('credit');
             $table->integer('debit');
             $table->timestamps();

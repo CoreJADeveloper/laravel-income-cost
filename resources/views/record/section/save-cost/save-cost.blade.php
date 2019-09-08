@@ -1,3 +1,4 @@
+<hr class="col-xs-12">
 <div id="save-cost-section">
   <div class="custom-control custom-radio">
     <input type="radio" class="custom-control-input" value="customer-cost" id="customer-cost" name="save-cost-selection">
