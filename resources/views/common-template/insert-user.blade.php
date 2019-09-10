@@ -7,10 +7,7 @@
       <input id="mobile"
       type="text"
       name="mobile"
-      class="@error('mobile') is-invalid @enderror form-control">
-      @error('mobile')
-          <div class="alert alert-danger">{{ $message }}</div>
-      @enderror
+      class="form-control">
     </div>
   </div>
 

@@ -5,6 +5,9 @@
  */
 
 require('./bootstrap');
+// require('jquery-autocomplete');
+// require('jquery-ui');
+// require('jquery-validation');
 
 // window.Vue = require('vue');
 

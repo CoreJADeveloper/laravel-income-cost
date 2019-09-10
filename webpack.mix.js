@@ -14,6 +14,8 @@ const mix = require('laravel-mix');
 // mix.js('resources/js/app.js', 'public/js')
 //     .sass('resources/sass/app.scss', 'public/css');
 
-mix.js(['resources/js/app.js', 'resources/js/script.js'], 'public/js/app.js');
+mix.js(['resources/js/app.js', 'resources/js/jquery.auto-complete.min.js',
+'resources/js/jquery-ui.js', 'resources/js/script.js'], 'public/js/app.js');
 mix.sass('resources/sass/app.scss', 'public/css/app.css');
-// mix.styles(['public/css/app.css', 'resources/css/bootstrap-datepicker.min.css'], 'public/css/app.css');
+mix.styles(['public/css/app.css', 'resources/css/jquery.auto-complete.min.css',
+'resources/css/jquery-ui.css'], 'public/css/app.css');

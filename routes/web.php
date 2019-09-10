@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
   Route::post('/brands/store', 'BrandsController@store');
 
   Route::get('/records/create', 'RecordsController@create');
+  Route::get('/records/autocomplete', 'RecordsController@autocomplete');
   Route::post('/records/create/sell-cement', 'RecordsController@create_sell_cement_entities');
 
   Route::post('/get-custom-template', 'HelperController@render_custom_template');

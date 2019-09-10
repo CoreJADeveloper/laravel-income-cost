@@ -16,6 +16,20 @@ class RecordsController extends Controller
     $this->customerEntityModel = new CustomerEntity();
   }
 
+  public function autocomplete(Request $request){
+    $query = request()->get('query');
+
+    $results = array();
+
+    $queries = $this->customerModel->search_customer_records($query);
+
+    foreach ($queries as $query)
+    {
+        $results[] = [ 'id' => $query->id, 'value' => $query->name ];
+    }
+    return response()->json($results);
+  }
+
   /**
    * Show the form for creating a new resource.
    *
@@ -26,6 +40,10 @@ class RecordsController extends Controller
   }
 
   public function create_sell_cement_entities(Request $request){
+    $validatedData = $request->validate([
+        'customer_name' => 'required'
+    ]);
+
     $data = request()->all();
     $customer_id = $this->customerModel->insert_customer_record($data);
     $data['customer_id'] = $customer_id;

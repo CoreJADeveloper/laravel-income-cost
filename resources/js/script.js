@@ -45,6 +45,10 @@ jQuery(document).ready(function($){
          var template_html = data.content;
          $('#selected-section-container').empty();
          $('#selected-section-container').append(template_html);
+
+         $('#selected-section-container')
+         .find("#cement-create-record #customer_name")
+         .autocomplete(autocompleteOptions);
        }
     });
   }
@@ -168,8 +172,42 @@ jQuery(document).ready(function($){
       url: url,
       data: form.serialize(),
       success: function(data) {
-        console.log(data);
+        if(data.success){
+          $('#cement-record-success').removeClass('invisible');
+          $('#cement-record-success').addClass('visible');
+
+          $( form ).each(function(){
+              this.reset();
+          });
+
+          $('#customer-information').empty();
+        }
       }
     });
   });
+
+  var autocompleteOptions = {
+    minLength: 3,
+    delay: 500,
+    source: function(request, response) {
+      $.ajax({
+        type: "GET",
+        url: "autocomplete",
+        data: { query: request.term },
+        success: function(data) {
+          response(data);
+        }
+      });
+    },
+    create: function () {
+      $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+          return $('<li>')
+              .append('<a>' + item.label + '</a>')
+              .appendTo(ul);
+      };
+    }
+  };
+
+  $("#cement-create-record #customer_name").autocomplete(autocompleteOptions);
+
 })

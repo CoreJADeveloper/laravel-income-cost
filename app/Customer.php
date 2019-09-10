@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Customer extends Model
 {
@@ -48,5 +49,12 @@ class Customer extends Model
     $customer->save();
 
     return $customer->id;
+  }
+
+  public function search_customer_records($query){
+    $queries = DB::table('customers')
+            ->where('name', 'LIKE', '%'.$query.'%')
+            ->take(5)->get();
+    return $queries;
   }
 }
