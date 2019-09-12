@@ -10,22 +10,13 @@
             <input id="customer_name" required type="text" name="customer_name"
             class="@error('customer_name') is-invalid @enderror form-control">
             <div class="input-group-append">
-              <button><i class="fa fa-times" aria-hidden="true"></i></button>
+              <button type="button" id="reset-customer-name"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             @error('customer_name')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
           </div>
         </div>
-
-
-        <!-- <div class="form-group">
-          <label for="customer_name">কাস্টমারের নাম</label>
-          <input id="customer_name" required type="text" name="customer_name" class="@error('customer_name') is-invalid @enderror form-control">
-          @error('customer_name')
-              <div class="alert alert-danger">{{ $message }}</div>
-          @enderror
-        </div> -->
       </div>
 
       <div class="col-sm-4">
@@ -95,10 +86,13 @@
     <div id="customer-information">
     </div>
 
+    <hr class="col-xs-12">
+
     <div class="row">
       <div class="col-sm-2">
         <div class="form-group">
-            <input type="submit" id="save-cement-record" class="btn btn-primary" value="Save" />
+          <input type="hidden" id="current-user-id" name="current_user_id" value="" />
+          <input type="submit" id="save-cement-record" class="btn btn-primary" value="Save" />
         </div>
       </div>
       <div class="col-sm-6 invisible" id="cement-record-success">
@@ -110,3 +104,26 @@
 
   </form>
 </div>
+
+<style>
+  .autocomplete-customer-container{
+    padding: 5px;
+  }
+
+  .autocomplete-customer-card{
+    border-radius: 0;
+  }
+
+  .ui-autocomplete {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 350px;
+  }
+
+  .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+    background: #56BF8D !important;
+    font-weight: bold !important;
+    border: none;
+    color: #ffffff !important;
+  }
+</style

@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Brand;
+use App\Customer;
 
 class HelperController extends Controller
 {
   private $brandModel;
+  private $customerModel;
 
   public function __construct(){
     $this->brandModel = new Brand();
+    $this->customerModel = new Customer();
   }
 
   /**
@@ -38,6 +41,17 @@ class HelperController extends Controller
     if($section == 'insert_customer_information'){
       $html = view('common-template.insert-user')->render();
     }
+
+    return response()->json(['content'=> $html]);
+  }
+
+  public function render_existing_customer_template(Request $request){
+    $user_id = $request->get('user_id');
+
+    $customer_information = $this->customerModel->get_existing_customer_record($user_id);
+    // $customer_latest_entity = $this->customerModel->get_existing_customer_entity_record($user_id);
+
+    $html = view('common-template.existing-user')->with(['record' => $customer_information])->render();
 
     return response()->json(['content'=> $html]);
   }

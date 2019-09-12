@@ -1,5 +1,6 @@
-<h3>কাস্টমারের অন্যান্য তথ্য</h3>
 <hr class="col-xs-12">
+<h3>কাস্টমারের অন্যান্য তথ্য</h3>
+
 <div class="row">
   <div class="col-sm-4">
     <div class="form-group">

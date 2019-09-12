@@ -53,8 +53,20 @@ class Customer extends Model
 
   public function search_customer_records($query){
     $queries = DB::table('customers')
+            ->select('id as value', 'name as label', 'mobile', 'address')
             ->where('name', 'LIKE', '%'.$query.'%')
-            ->take(5)->get();
+            ->take(20)->get()->toArray();
     return $queries;
+  }
+
+  public function get_existing_customer_record($customer_id){
+    $customer_information = DB::table('customers')
+            ->join('customer_entities', 'customers.id', '=', 'customer_entities.customer_id')
+            ->select('customers.id', 'customers.name', 'customers.mobile',
+            'customers.national_id', 'customers.address', 'customer_entities.debit')
+            ->where('customers.id', $customer_id)
+            ->latest('customer_entities.id')
+            ->first();
+    return $customer_information;
   }
 }
