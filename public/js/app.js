@@ -39322,6 +39322,11 @@ jQuery(document).ready(function ($) {
             $('ul.ui-autocomplete').hide();
           }
         });
+        $('#selected-section-container').find("#rod-sell-create-record #customer_name").autocomplete(autocompleteOptions).off('blur').on('blur', function () {
+          if (document.hasFocus()) {
+            $('ul.ui-autocomplete').hide();
+          }
+        });
       }
     });
   };
@@ -39447,7 +39452,121 @@ jQuery(document).ready(function ($) {
     $("#cement-create-record #customer_name").val('');
     render_due_customer_information();
   });
-  $("#cement-create-record #customer_name").autocomplete(autocompleteOptions);
+  $("#cement-create-record #customer_name").autocomplete(autocompleteOptions); // Sell Rod Record
+
+  var rod_sell_template_html = '';
+
+  var check_rod_sell_payment_type_due = function check_rod_sell_payment_type_due() {
+    var amount = $('#rod-sell-create-record #total_quantity').val();
+    var rate = $('#rod-sell-create-record #rate').val();
+    var price = $('#rod-sell-create-record #price').val();
+
+    if (amount && rate && price) {
+      var amount = parseInt(amount);
+      var rate = parseInt(rate);
+      var price = parseInt(price);
+      var total_price = amount * rate;
+      if (total_price <= price) return false;else return true;
+    } else {
+      return false;
+    }
+  };
+
+  var get_rod_sell_customer_information_template = function get_rod_sell_customer_information_template() {
+    if ($('#current-user-id').val().length != 0) {
+      return false;
+    }
+
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    var data = {
+      section: 'insert_customer_information'
+    };
+    $.ajax({
+      type: 'POST',
+      url: '/get-custom-template',
+      data: data,
+      success: function success(data) {
+        rod_sell_template_html = data.content;
+
+        if ($('#customer-information').length) {
+          $('#customer-information').empty();
+        }
+
+        $('#customer-information').append(rod_sell_template_html);
+      }
+    });
+  };
+
+  var render_due_customer_information = function render_due_customer_information() {
+    var payment_type_due = check_rod_sell_payment_type_due();
+
+    if (!payment_type_due) {
+      $('#customer-information').empty();
+    } else {
+      get_rod_sell_customer_information_template();
+    }
+  };
+
+  $(document).on('input', '#rod-sell-create-record #total_quantity', function () {
+    if ($('#current-user-id').val().length != 0) {
+      return false;
+    }
+
+    render_due_customer_information();
+  });
+  $(document).on('input', '#rod-sell-create-record #rate', function () {
+    if ($('#current-user-id').val().length != 0) {
+      return false;
+    }
+
+    render_due_customer_information();
+  });
+  $(document).on('input', '#rod-sell-create-record #price', function () {
+    if ($('#current-user-id').val().length != 0) {
+      return false;
+    }
+
+    render_due_customer_information();
+  });
+  $(document).on('submit', '#rod-sell-record-form', function (e) {
+    e.preventDefault();
+    var form = $(this);
+    var url = form.attr('data-url');
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function success(data) {
+        if (data.success) {
+          $('#rod-sell-record-success').removeClass('invisible');
+          $('#rod-sell-record-success').addClass('visible');
+          $('#customer_name').prop('disabled', false);
+          $(form).each(function () {
+            this.reset();
+          });
+          $('#customer-information').empty();
+        }
+      }
+    });
+  });
+  $(document).on('click', '#rod-sell-create-record #reset-customer-name', function (e) {
+    e.preventDefault();
+    $('#customer-information').empty();
+    $("#rod-sell-create-record #customer_name").prop('disabled', false);
+    $('#current-user-id').val('');
+    $("#rod-sell-create-record #customer_name").val('');
+    render_due_customer_information();
+  });
+  $("#rod-sell-create-record #customer_name").autocomplete(autocompleteOptions);
 });
 
 /***/ }),

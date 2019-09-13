@@ -37,6 +37,37 @@ class RecordsController extends Controller
     return view('record.create');
   }
 
+  public function create_sell_rod_entities(Request $request){
+    $validatedData = $request->validate([
+        'brand' => 'required',
+        'payment_type' => 'required',
+        'total_quantity' => 'required',
+        'rate' => 'required',
+        'price' => 'required',
+    ]);
+
+    $data = request()->all();
+
+    $data = $this->validate_empty_field($data);
+
+    $payment_type = $data['payment_type'];
+    $check_new_customer = true;
+    $source = 'rod';
+
+    if(isset($data['current_user_id']) && !empty($data['current_user_id'])){
+      $customer_id = $data['current_user_id'];
+      $check_new_customer = false;
+    } else {
+      $customer_id = $this->process_customer_record_insertion($data);
+    }
+
+    $data = $this->process_customer_entity_data($check_new_customer, $source, $customer_id, $data);
+    $customer_entity_id = $this->process_customer_entity_record_insertion($data);
+    $customer_payment_entity_id = $this->process_customer_payment_entity_record_insertion($payment_type, $data);
+
+    return response()->json(['success'=> 'true']);
+  }
+
   public function create_sell_cement_entities(Request $request){
     $validatedData = $request->validate([
         'brand' => 'required',
@@ -52,6 +83,7 @@ class RecordsController extends Controller
 
     $payment_type = $data['payment_type'];
     $check_new_customer = true;
+    $source = 'cement';
 
     if(isset($data['current_user_id']) && !empty($data['current_user_id'])){
       $customer_id = $data['current_user_id'];
@@ -69,7 +101,7 @@ class RecordsController extends Controller
     // $data = $this->calculate_new_user_credit_debit($data);
     //
     // $entity_id = $this->customerEntityModel->insert_customer_entity_record($data);
-    $data = $this->process_customer_entity_data($check_new_customer, $customer_id, $data);
+    $data = $this->process_customer_entity_data($check_new_customer, $source, $customer_id, $data);
     $customer_entity_id = $this->process_customer_entity_record_insertion($data);
     $customer_payment_entity_id = $this->process_customer_payment_entity_record_insertion($payment_type, $data);
     // $payment_data = $this->process_customer_payment_entity_data($payment_type, $data);
@@ -116,10 +148,10 @@ class RecordsController extends Controller
     return $payment_entity_id;
   }
 
-  private function process_customer_entity_data($check_new_customer, $customer_id, $data){
+  private function process_customer_entity_data($check_new_customer, $source, $customer_id, $data){
     $data['customer_id'] = $customer_id;
     $data['total_price'] = $this->total_price($data['total_quantity'], $data['rate']);
-    $data['source'] = 'cement';
+    $data['source'] = $source;
     $data['payment_type'] = '';
 
     if($check_new_customer)
@@ -154,6 +186,7 @@ class RecordsController extends Controller
 
   private function calculate_existing_user_credit_debit($customer_id, $data){
     $customer_information = $this->customerModel->get_existing_customer_record($customer_id);
+    
     $data['credit'] = $data['total_price'];
     $data['debit'] = intval($data['credit']) + intval($customer_information->debit);
 

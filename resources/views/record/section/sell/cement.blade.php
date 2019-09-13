@@ -48,7 +48,7 @@
     <div class="row">
       <div class="col-sm-4">
         <div class="form-group">
-          <label for="total_quantity">মোট বস্তা</label>
+          <label for="total_quantity">মোট পরিমাণ / বস্তা</label>
           <input id="total_quantity" required
           type="number"
           name="total_quantity"

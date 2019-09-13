@@ -30,6 +30,28 @@ class Brand extends Model
   public $timestamps = true;
 
   /**
+   * Get all cement brands from storage.
+   *
+   * @return Mixed
+   */
+  public function get_all_cement_brands(){
+    $brandRecords = Brand::where('type', 'cement')->get();
+
+    return $brandRecords;
+  }
+
+  /**
+   * Get all rod brands from storage.
+   *
+   * @return Mixed
+   */
+  public function get_all_rod_brands(){
+    $brandRecords = Brand::where('type', 'rod')->get();
+
+    return $brandRecords;
+  }
+
+  /**
    * Get all brands from storage.
    *
    * @return Mixed

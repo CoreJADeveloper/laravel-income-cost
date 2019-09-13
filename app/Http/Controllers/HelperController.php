@@ -34,8 +34,12 @@ class HelperController extends Controller
       $html = view('record.section.save-cost.save-cost')->render();
     }
     if($section == 'sell-cement'){
-      $records = $this->brandModel->get_all_brands();
+      $records = $this->brandModel->get_all_cement_brands();
       $html = view('record.section.sell.cement', compact('records'))->render();
+    }
+    if($section == 'sell-rod'){
+      $records = $this->brandModel->get_all_rod_brands();
+      $html = view('record.section.sell.rod', compact('records'))->render();
     }
 
     if($section == 'insert_customer_information'){
