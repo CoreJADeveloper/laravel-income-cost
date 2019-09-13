@@ -37,9 +37,12 @@ Route::middleware(['auth'])->group(function () {
   Route::get('/records/autocomplete', 'RecordsController@autocomplete');
   Route::post('/records/create/sell-cement', 'RecordsController@create_sell_cement_entities');
   Route::post('/records/create/sell-rod', 'RecordsController@create_sell_rod_entities');
+  Route::post('/records/create/buy-cement', 'RecordsController@create_buy_cement_entities');
+  Route::post('/records/create/buy-rod', 'RecordsController@create_buy_rod_entities');
 
   Route::post('/get-custom-template', 'HelperController@render_custom_template');
   Route::post('/get-existing-user-information', 'HelperController@render_existing_customer_template');
+  Route::post('/get-existing-brand-information', 'HelperController@render_existing_brand_template');
 });
 
 Route::get('/home', 'HomeController@index')->name('home');

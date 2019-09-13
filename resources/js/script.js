@@ -1,8 +1,37 @@
 jQuery(document).ready(function($){
 
+  // Common function
+
+  var get_sell_buy_brand_information_template = function(brand_id){
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    var data = {
+      brand_id: brand_id
+    };
+
+    $.ajax({
+       type:'POST',
+       url:'/get-existing-brand-information',
+       data: data,
+       success:function(data){
+         let sell_buy_template_html = data.content;
+
+         if( $('#customer-information').length ) {
+           $('#customer-information').empty();
+         }
+
+         $('#customer-information').append(sell_buy_template_html);
+       }
+    });
+  }
+
   // Render insert record template
 
-  var get_selected_section_template = function(selected_section){
+  var get_initial_selected_section_template = function(selected_section){
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -112,7 +141,7 @@ jQuery(document).ready(function($){
     }
   };
 
-  var get_selected_sell_section_template = function(selected_section){
+  var get_selected_section_template = function(selected_section){
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -154,13 +183,19 @@ jQuery(document).ready(function($){
   $('#section-selection :radio[name="section-selection"]').change(function() {
     var selected_section = $(this).filter(':checked').val();
 
-    get_selected_section_template(selected_section);
+    get_initial_selected_section_template(selected_section);
   });
 
   $(document).on('change', '#sell-section :radio[name="sell-selection"]', function() {
     var selected_section = $(this).filter(':checked').val();
 
-    get_selected_sell_section_template(selected_section);
+    get_selected_section_template(selected_section);
+  });
+
+  $(document).on('change', '#buy-section :radio[name="buy-selection"]', function() {
+    var selected_section = $(this).filter(':checked').val();
+
+    get_selected_section_template(selected_section);
   });
 
 
@@ -432,5 +467,110 @@ jQuery(document).ready(function($){
   })
 
   $("#rod-sell-create-record #customer_name").autocomplete(autocompleteOptions);
+
+
+
+
+  // Buy Cement Record
+
+  $(document).on('submit', '#cement-buy-record-form', function(e) {
+    e.preventDefault();
+
+    var brand_id = $(this).find("#brand").val();
+    if(brand_id == 0){
+      $(this).find("#brand").focus();
+      return false;
+    }
+
+    var form = $(this);
+    var url = form.attr('data-url');
+
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function(data) {
+        if(data.success){
+          $('#cement-buy-record-success').removeClass('invisible');
+          $('#cement-buy-record-success').addClass('visible');
+
+          $('#customer_name').prop('disabled', false);
+
+          $( form ).each(function(){
+              this.reset();
+          });
+
+          $('#customer-information').empty();
+        }
+      }
+    });
+  });
+
+  $(document).on('change', '#cement-buy-create-record #brand', function() {
+    var option = this.value;
+
+    if(option != 0){
+      get_sell_buy_brand_information_template(option);
+    } else {
+      $('#customer-information').empty();
+    }
+  });
+
+  // Buy rod Record
+
+  $(document).on('submit', '#rod-buy-record-form', function(e) {
+    e.preventDefault();
+
+    var brand_id = $(this).find("#brand").val();
+    if(brand_id == 0){
+      $(this).find("#brand").focus();
+      return false;
+    }
+
+    var form = $(this);
+    var url = form.attr('data-url');
+
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function(data) {
+        if(data.success){
+          $('#rod-buy-record-success').removeClass('invisible');
+          $('#rod-buy-record-success').addClass('visible');
+
+          $('#customer_name').prop('disabled', false);
+
+          $( form ).each(function(){
+              this.reset();
+          });
+
+          $('#customer-information').empty();
+        }
+      }
+    });
+  });
+
+  $(document).on('change', '#rod-buy-create-record #brand', function() {
+    var option = this.value;
+
+    if(option != 0){
+      get_sell_buy_brand_information_template(option);
+    } else {
+      $('#customer-information').empty();
+    }
+  });
 
 })

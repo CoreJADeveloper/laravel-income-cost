@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Brand extends Model
 {
@@ -76,5 +77,20 @@ class Brand extends Model
     ]);
 
     $brand->save();
+  }
+
+  public function get_existing_brand_record($brand_id){
+    $brand_information = DB::table('brands')
+            ->join('brand_entities', 'brands.id', '=', 'brand_entities.brand_id')
+            ->select('brands.id', 'brands.name', 'brand_entities.debit')
+            ->where('brands.id', $brand_id)
+            ->latest('brand_entities.id')
+            ->first();
+    return $brand_information;
+  }
+
+  public function get_brand_by_id($id){
+    $brand = Brand::where('id', '=', $id)->first();
+    return $brand;
   }
 }
