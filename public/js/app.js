@@ -39353,6 +39353,11 @@ jQuery(document).ready(function ($) {
             $('ul.ui-autocomplete').hide();
           }
         });
+        $('#selected-section-container').find("#customer-cost-create-record #customer_name").autocomplete(autocompleteOptions).off('blur').on('blur', function () {
+          if (document.hasFocus()) {
+            $('ul.ui-autocomplete').hide();
+          }
+        });
       }
     });
   };
@@ -39366,6 +39371,10 @@ jQuery(document).ready(function ($) {
     get_selected_section_template(selected_section);
   });
   $(document).on('change', '#buy-section :radio[name="buy-selection"]', function () {
+    var selected_section = $(this).filter(':checked').val();
+    get_selected_section_template(selected_section);
+  });
+  $(document).on('change', '#save-cost-section :radio[name="save-cost-selection"]', function () {
     var selected_section = $(this).filter(':checked').val();
     get_selected_section_template(selected_section);
   }); // Sell Cement Record
@@ -39682,6 +39691,46 @@ jQuery(document).ready(function ($) {
     } else {
       $('#customer-information').empty();
     }
+  }); // Customer cost
+
+  $(document).on('submit', '#customer-cost-record-form', function (e) {
+    e.preventDefault();
+
+    if ($('#current-user-id').val().length == 0) {
+      $('#customer-cost-create-record #customer_name').focus();
+      return false;
+    }
+
+    var form = $(this);
+    var url = form.attr('data-url');
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function success(data) {
+        if (data.success) {
+          $('#customer-cost-record-success').removeClass('invisible');
+          $('#customer-cost-record-success').addClass('visible');
+          $('#customer_name').prop('disabled', false);
+          $(form).each(function () {
+            this.reset();
+          });
+          $('#customer-information').empty();
+        }
+      }
+    });
+  });
+  $(document).on('click', '#customer-cost-create-record #reset-customer-name', function (e) {
+    e.preventDefault();
+    $('#customer-information').empty();
+    $("#customer-cost-create-record #customer_name").prop('disabled', false);
+    $('#current-user-id').val('');
+    $("#customer-cost-create-record #customer_name").val('');
   });
 });
 

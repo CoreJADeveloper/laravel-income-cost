@@ -50,6 +50,10 @@ class HelperController extends Controller
       $html = view('record.section.buy.rod', compact('records'))->render();
     }
 
+    if($section == 'customer-cost'){
+      $html = view('record.section.save-cost.customer-cost')->render();
+    }
+
     if($section == 'insert_customer_information'){
       $html = view('common-template.insert-user')->render();
     }

@@ -7,6 +7,7 @@ use App\Customer;
 use App\CustomerEntity;
 use App\Brand;
 use App\BrandEntity;
+use App\DailyCost;
 
 class RecordsController extends Controller
 {
@@ -14,12 +15,14 @@ class RecordsController extends Controller
   private $customerEntityModel;
   private $brandModel;
   private $brandEntityModel;
+  private $dailyCostModel;
 
   public function __construct(){
     $this->customerModel = new Customer();
     $this->customerEntityModel = new CustomerEntity();
     $this->brandModel = new Brand();
-    $this->brandEntityModel = new BrandEntity;
+    $this->brandEntityModel = new BrandEntity();
+    $this->dailyCostModel = new DailyCost();
   }
 
   public function autocomplete(Request $request){
@@ -297,4 +300,36 @@ class RecordsController extends Controller
 
     return $payment_data;
   }
+
+  public function create_customer_cost_entities(Request $request){
+    $validatedData = $request->validate([
+        'cost_type' => 'required',
+        'amount' => 'required',
+        'current_user_id' => 'required'
+    ]);
+
+    $data = request()->all();
+
+    $cost_data = $this->process_customer_cost_payment_entity_data($data);
+
+    $payment_entity_id = $this->customerEntityModel->insert_customer_payment_entity_record($cost_data);
+
+    $daily_cost_id = $this->dailyCostModel->insert_daily_cost_record($data);
+
+    return response()->json(['success'=> 'true']);
+  }
+
+  private function process_customer_cost_payment_entity_data($data){
+    $customer_information = $this->customerModel->get_existing_customer_record($data['current_user_id']);
+
+    $payment_data = array();
+
+    $payment_data['customer_id'] = $data['current_user_id'];
+    $payment_data['cost_type'] = $data['cost_type'];
+    $payment_data['credit'] = $data['amount'];
+    $payment_data['debit'] = intval($data['amount']) + intval($customer_information->debit);
+
+    return $payment_data;
+  }
+
 }
