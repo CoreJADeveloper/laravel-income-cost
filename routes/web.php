@@ -40,6 +40,12 @@ Route::middleware(['auth'])->group(function () {
   Route::post('/records/create/buy-cement', 'RecordsController@create_buy_cement_entities');
   Route::post('/records/create/buy-rod', 'RecordsController@create_buy_rod_entities');
   Route::post('/records/create/customer-cost', 'RecordsController@create_customer_cost_entities');
+  Route::post('/records/create/customer-due-collection', 'RecordsController@create_customer_due_collection_entities');
+  Route::post('/records/create/company-cost', 'RecordsController@create_company_cost_entities');
+  Route::post('/records/create/company-due', 'RecordsController@create_company_due_entities');
+  Route::post('/records/create/bank-saving', 'RecordsController@create_bank_saving_entities');
+  Route::post('/records/create/employee-salary', 'RecordsController@create_employee_salary_entities');
+  Route::post('/records/create/other-cost', 'RecordsController@create_other_cost_entities');
 
   Route::post('/get-custom-template', 'HelperController@render_custom_template');
   Route::post('/get-existing-user-information', 'HelperController@render_existing_customer_template');

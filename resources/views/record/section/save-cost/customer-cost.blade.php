@@ -21,10 +21,10 @@
 
       <div class="col-sm-4">
         <div class="form-group">
-          <label for="cost_type">খরচের বিবরণ</label>
-          <input id="cost_type" required type="text" name="cost_type"
-          class="@error('cost_type') is-invalid @enderror form-control">
-          @error('cost_type')
+          <label for="payment_type">খরচের বিবরণ</label>
+          <input id="payment_type" required type="text" name="payment_type"
+          class="@error('payment_type') is-invalid @enderror form-control">
+          @error('payment_type')
               <div class="alert alert-danger">{{ $message }}</div>
           @enderror
         </div>

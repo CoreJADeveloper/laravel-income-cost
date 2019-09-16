@@ -64,7 +64,7 @@ class CustomerEntity extends Model
   public function insert_customer_payment_entity_record($data){
     $customerEntity = new CustomerEntity([
       'customer_id' => $data['customer_id'],
-      'payment_type' => $data['cost_type'],
+      'payment_type' => $data['payment_type'],
       'credit' => $data['credit'],
       'debit' => $data['debit']
     ]);

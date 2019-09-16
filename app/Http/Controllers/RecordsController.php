@@ -8,6 +8,8 @@ use App\CustomerEntity;
 use App\Brand;
 use App\BrandEntity;
 use App\DailyCost;
+use App\BankSaving;
+use App\Salary;
 
 class RecordsController extends Controller
 {
@@ -16,6 +18,8 @@ class RecordsController extends Controller
   private $brandModel;
   private $brandEntityModel;
   private $dailyCostModel;
+  private $bankSavingModel;
+  private $salaryModel;
 
   public function __construct(){
     $this->customerModel = new Customer();
@@ -23,6 +27,8 @@ class RecordsController extends Controller
     $this->brandModel = new Brand();
     $this->brandEntityModel = new BrandEntity();
     $this->dailyCostModel = new DailyCost();
+    $this->bankSavingModel = new BankSaving();
+    $this->salaryModel = new Salary();
   }
 
   public function autocomplete(Request $request){
@@ -303,7 +309,7 @@ class RecordsController extends Controller
 
   public function create_customer_cost_entities(Request $request){
     $validatedData = $request->validate([
-        'cost_type' => 'required',
+        'payment_type' => 'required',
         'amount' => 'required',
         'current_user_id' => 'required'
     ]);
@@ -314,7 +320,7 @@ class RecordsController extends Controller
 
     $payment_entity_id = $this->customerEntityModel->insert_customer_payment_entity_record($cost_data);
 
-    $daily_cost_id = $this->dailyCostModel->insert_daily_cost_record($data);
+    $daily_cost_id = $this->dailyCostModel->insert_daily_cost_record($cost_data);
 
     return response()->json(['success'=> 'true']);
   }
@@ -325,11 +331,157 @@ class RecordsController extends Controller
     $payment_data = array();
 
     $payment_data['customer_id'] = $data['current_user_id'];
-    $payment_data['cost_type'] = $data['cost_type'];
+    $payment_data['payment_type'] = $data['payment_type'];
+    $payment_data['cost_type'] = $data['payment_type'];
+    $payment_data['amount'] = $data['amount'];
     $payment_data['credit'] = $data['amount'];
     $payment_data['debit'] = intval($data['amount']) + intval($customer_information->debit);
 
     return $payment_data;
+  }
+
+  public function create_customer_due_collection_entities(Request $request){
+    $validatedData = $request->validate([
+        'payment_type' => 'required',
+        'amount' => 'required',
+        'current_user_id' => 'required'
+    ]);
+
+    $data = request()->all();
+
+    $cost_data = $this->process_customer_due_collection_payment_entity_data($data);
+
+    $payment_entity_id = $this->customerEntityModel->insert_customer_payment_entity_record($cost_data);
+
+    $daily_cost_id = $this->dailyCostModel->insert_daily_cost_record($cost_data);
+
+    return response()->json(['success'=> 'true']);
+  }
+
+  private function process_customer_due_collection_payment_entity_data($data){
+    $customer_information = $this->customerModel->get_existing_customer_record($data['current_user_id']);
+
+    $payment_data = array();
+
+    $payment_data['customer_id'] = $data['current_user_id'];
+    $payment_data['payment_type'] = $data['payment_type'];
+    $payment_data['cost_type'] = $data['payment_type'];
+    $payment_data['amount'] = $data['amount'];
+    $payment_data['credit'] = $data['amount'];
+    $payment_data['debit'] = intval($customer_information->debit) - intval($data['amount']);
+
+    return $payment_data;
+  }
+
+  public function create_company_cost_entities(Request $request){
+    $validatedData = $request->validate([
+        'brand' => 'required',
+        'payment_type' => 'required',
+        'amount' => 'required',
+    ]);
+
+    $data = request()->all();
+
+    $cost_data = $this->process_company_cost_payment_entity_data($data);
+
+    $payment_entity_id = $this->brandEntityModel->insert_brand_payment_entity_record($cost_data);
+
+    $daily_cost_id = $this->dailyCostModel->insert_daily_cost_record($cost_data);
+
+    return response()->json(['success'=> 'true']);
+  }
+
+  private function process_company_cost_payment_entity_data($data){
+    $brand_information = $this->brandModel->get_existing_brand_record($data['brand']);
+
+    $payment_data = array();
+
+    $payment_data['brand_id'] = $data['brand'];
+    $payment_data['payment_type'] = $data['payment_type'];
+    $payment_data['cost_type'] = $data['payment_type'];
+    $payment_data['amount'] = $data['amount'];
+    $payment_data['credit'] = $data['amount'];
+    $payment_data['debit'] = intval($data['amount']) + intval($brand_information->debit);
+
+    return $payment_data;
+  }
+
+  public function create_company_due_entities(Request $request){
+    $validatedData = $request->validate([
+        'brand' => 'required',
+        'payment_type' => 'required',
+        'amount' => 'required'
+    ]);
+
+    $data = request()->all();
+
+    $cost_data = $this->process_company_due_payment_entity_data($data);
+
+    $payment_entity_id = $this->brandEntityModel->insert_brand_payment_entity_record($cost_data);
+
+    $daily_cost_id = $this->dailyCostModel->insert_daily_cost_record($cost_data);
+
+    return response()->json(['success'=> 'true']);
+  }
+
+  private function process_company_due_payment_entity_data($data){
+    $brand_information = $this->brandModel->get_existing_brand_record($data['brand']);
+
+    $payment_data = array();
+
+    $payment_data['brand_id'] = $data['brand'];
+    $payment_data['payment_type'] = $data['payment_type'];
+    $payment_data['cost_type'] = $data['payment_type'];
+    $payment_data['amount'] = $data['amount'];
+    $payment_data['credit'] = $data['amount'];
+    $payment_data['debit'] = intval($brand_information->debit) - intval($data['amount']);
+
+    return $payment_data;
+  }
+
+  public function create_bank_saving_entities(Request $request){
+    $validatedData = $request->validate([
+        'bank_account_number' => 'required',
+        'amount' => 'required'
+    ]);
+
+    $data = request()->all();
+
+    $id = $this->bankSavingModel->insert_bank_saving_record($data);
+
+    return response()->json(['success'=> 'true']);
+  }
+
+  public function create_employee_salary_entities(Request $request){
+    $validatedData = $request->validate([
+        'name' => 'required',
+        'amount' => 'required'
+    ]);
+
+    $data = request()->all();
+
+    $id = $this->salaryModel->insert_salary_record($data);
+
+    $data['cost_type'] = $data['comment'];
+
+    $daily_cost_id = $this->dailyCostModel->insert_daily_cost_record($data);
+
+    return response()->json(['success'=> 'true']);
+  }
+
+  public function create_other_cost_entities(Request $request){
+    $validatedData = $request->validate([
+        'amount' => 'required',
+        'payment_type' => 'required'
+    ]);
+
+    $data = request()->all();
+
+    $data['cost_type'] = $data['payment_type'];
+
+    $daily_cost_id = $this->dailyCostModel->insert_daily_cost_record($data);
+
+    return response()->json(['success'=> 'true']);
   }
 
 }

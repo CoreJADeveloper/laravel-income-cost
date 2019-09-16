@@ -4,16 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DailyCost extends Model
+class BankSaving extends Model
 {
   /**
    * The table associated with the model.
    *
    * @var string
    */
-  protected $table = 'daily_costs';
+  protected $table = 'bank_savings';
 
-  protected $fillable = ['cost_type', 'amount', 'comment', 'entity_id'];
+  protected $fillable = ['bank_account_number', 'amount', 'comment'];
 
   /**
    * The primary key associated with the table.
@@ -35,15 +35,15 @@ class DailyCost extends Model
    * @param Array
    *
    */
-  public function insert_daily_cost_record($data){
-    $dailyCost = new DailyCost([
-      'cost_type' => $data['cost_type'],
+  public function insert_bank_saving_record($data){
+    $bankSaving = new BankSaving([
+      'bank_account_number' => $data['bank_account_number'],
       'amount' => $data['amount'],
       'comment' => $data['comment']
     ]);
 
-    $dailyCost->save();
+    $bankSaving->save();
 
-    return $dailyCost->id;
+    return $bankSaving->id;
   }
 }

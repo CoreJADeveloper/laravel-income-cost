@@ -21,6 +21,11 @@
   </div>
 
   <div class="custom-control custom-radio">
+    <input type="radio" class="custom-control-input" value="bank-saving" id="bank-saving" name="save-cost-selection">
+    <label class="custom-control-label" for="bank-saving">ব্যাংক জমা</label>
+  </div>
+
+  <div class="custom-control custom-radio">
     <input type="radio" class="custom-control-input" value="employee-salary" id="employee-salary" name="save-cost-selection">
     <label class="custom-control-label" for="employee-salary">কর্মচারীর বেতন প্রদান</label>
   </div>

@@ -54,6 +54,32 @@ class HelperController extends Controller
       $html = view('record.section.save-cost.customer-cost')->render();
     }
 
+    if($section == 'customer-due'){
+      $html = view('record.section.save-cost.customer-due-collection')->render();
+    }
+
+    if($section == 'company-cost'){
+      $records = $this->brandModel->get_all_rod_brands();
+      $html = view('record.section.save-cost.company-cost', compact('records'))->render();
+    }
+
+    if($section == 'company-due'){
+      $records = $this->brandModel->get_all_rod_brands();
+      $html = view('record.section.save-cost.company-due', compact('records'))->render();
+    }
+
+    if($section == 'bank-saving'){
+      $html = view('record.section.save-cost.bank-saving')->render();
+    }
+
+    if($section == 'employee-salary'){
+      $html = view('record.section.save-cost.employee-salary')->render();
+    }
+
+    if($section == 'other-cost'){
+      $html = view('record.section.save-cost.other-cost')->render();
+    }
+
     if($section == 'insert_customer_information'){
       $html = view('common-template.insert-user')->render();
     }

@@ -184,6 +184,14 @@ jQuery(document).ready(function($){
                 $('ul.ui-autocomplete').hide();
             }
          });
+
+         $('#selected-section-container')
+         .find("#customer-due-collection-create-record #customer_name")
+         .autocomplete(autocompleteOptions).off('blur').on('blur', function() {
+            if(document.hasFocus()) {
+                $('ul.ui-autocomplete').hide();
+            }
+         });
        }
     });
   }
@@ -634,6 +642,250 @@ jQuery(document).ready(function($){
     $("#customer-cost-create-record #customer_name").prop('disabled', false);
     $('#current-user-id').val('');
     $("#customer-cost-create-record #customer_name").val('');
+  });
+
+  // Customer due collection
+
+  $(document).on('submit', '#customer-due-collection-record-form', function(e) {
+    e.preventDefault();
+
+    if ($('#current-user-id').val().length == 0){
+      $('#customer-due-collection-create-record #customer_name').focus();
+      return false;
+    }
+
+    var form = $(this);
+    var url = form.attr('data-url');
+
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function(data) {
+        if(data.success){
+          $('#customer-due-collection-record-success').removeClass('invisible');
+          $('#customer-due-collection-record-success').addClass('visible');
+
+          $('#customer_name').prop('disabled', false);
+
+          $( form ).each(function(){
+              this.reset();
+          });
+
+          $('#customer-information').empty();
+        }
+      }
+    });
+  });
+
+  $(document).on('click', '#customer-due-collection-create-record #reset-customer-name', function(e){
+    e.preventDefault();
+    $('#customer-information').empty();
+    $("#customer-due-collection-create-record #customer_name").prop('disabled', false);
+    $('#current-user-id').val('');
+    $("#customer-due-collection-create-record #customer_name").val('');
   })
+
+  // Company cost
+
+  $(document).on('submit', '#company-cost-record-form', function(e) {
+    e.preventDefault();
+
+    var brand_id = $(this).find("#brand").val();
+    if(brand_id == 0){
+      $(this).find("#brand").focus();
+      return false;
+    }
+
+    var form = $(this);
+    var url = form.attr('data-url');
+
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function(data) {
+        if(data.success){
+          $('#company-cost-record-success').removeClass('invisible');
+          $('#company-cost-record-success').addClass('visible');
+
+          $('#customer_name').prop('disabled', false);
+
+          $( form ).each(function(){
+              this.reset();
+          });
+
+          $('#customer-information').empty();
+        }
+      }
+    });
+  });
+
+  $(document).on('change', '#company-cost-create-record #brand', function() {
+    var option = this.value;
+
+    if(option != 0){
+      get_sell_buy_brand_information_template(option);
+    } else {
+      $('#customer-information').empty();
+    }
+  });
+
+  // Company due
+
+  $(document).on('submit', '#company-due-record-form', function(e) {
+    e.preventDefault();
+
+    var brand_id = $(this).find("#brand").val();
+    if(brand_id == 0){
+      $(this).find("#brand").focus();
+      return false;
+    }
+
+    var form = $(this);
+    var url = form.attr('data-url');
+
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function(data) {
+        if(data.success){
+          $('#company-due-record-success').removeClass('invisible');
+          $('#company-due-record-success').addClass('visible');
+
+          $('#customer_name').prop('disabled', false);
+
+          $( form ).each(function(){
+              this.reset();
+          });
+
+          $('#customer-information').empty();
+        }
+      }
+    });
+  });
+
+  $(document).on('change', '#company-due-create-record #brand', function() {
+    var option = this.value;
+
+    if(option != 0){
+      get_sell_buy_brand_information_template(option);
+    } else {
+      $('#customer-information').empty();
+    }
+  });
+
+  // Bank saving
+
+  $(document).on('submit', '#bank-saving-record-form', function(e) {
+    e.preventDefault();
+
+    var form = $(this);
+    var url = form.attr('data-url');
+
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function(data) {
+        if(data.success){
+          $('#bank-saving-record-success').removeClass('invisible');
+          $('#bank-saving-record-success').addClass('visible');
+
+          $( form ).each(function(){
+              this.reset();
+          });
+        }
+      }
+    });
+  });
+
+  // Salary
+
+  $(document).on('submit', '#employee-salary-record-form', function(e) {
+    e.preventDefault();
+
+    var form = $(this);
+    var url = form.attr('data-url');
+
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function(data) {
+        if(data.success){
+          $('#employee-salary-record-success').removeClass('invisible');
+          $('#employee-salary-record-success').addClass('visible');
+
+          $( form ).each(function(){
+              this.reset();
+          });
+        }
+      }
+    });
+  });
+
+  // Salary
+
+  $(document).on('submit', '#other-cost-record-form', function(e) {
+    e.preventDefault();
+
+    var form = $(this);
+    var url = form.attr('data-url');
+
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function(data) {
+        if(data.success){
+          $('#other-cost-record-success').removeClass('invisible');
+          $('#other-cost-record-success').addClass('visible');
+
+          $( form ).each(function(){
+              this.reset();
+          });
+        }
+      }
+    });
+  });
+
 
 })
