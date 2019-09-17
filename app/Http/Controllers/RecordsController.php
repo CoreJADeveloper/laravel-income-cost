@@ -401,7 +401,7 @@ class RecordsController extends Controller
     $payment_data['cost_type'] = $data['payment_type'];
     $payment_data['amount'] = $data['amount'];
     $payment_data['credit'] = $data['amount'];
-    $payment_data['debit'] = intval($data['amount']) + intval($brand_information->debit);
+    $payment_data['debit'] = intval($brand_information->debit) - intval($data['amount']);
 
     return $payment_data;
   }

@@ -276,7 +276,7 @@ jQuery(document).ready(function($){
     });
   }
 
-  var render_due_customer_information = function(){
+  var render_cement_due_customer_information = function(){
     var payment_type_due = check_cement_payment_type_due();
 
     if(!payment_type_due){
@@ -291,7 +291,7 @@ jQuery(document).ready(function($){
       return false;
     }
 
-    render_due_customer_information();
+    render_cement_due_customer_information();
   });
 
   $(document).on('input', '#cement-create-record #rate', function() {
@@ -299,7 +299,7 @@ jQuery(document).ready(function($){
       return false;
     }
 
-    render_due_customer_information();
+    render_cement_due_customer_information();
   });
 
   $(document).on('input', '#cement-create-record #price', function() {
@@ -307,7 +307,7 @@ jQuery(document).ready(function($){
       return false;
     }
 
-    render_due_customer_information();
+    render_cement_due_customer_information();
   });
 
   $(document).on('submit', '#cement-record-form', function(e) {
@@ -350,7 +350,7 @@ jQuery(document).ready(function($){
     $('#current-user-id').val('');
     $("#cement-create-record #customer_name").val('');
 
-    render_due_customer_information();
+    render_cement_due_customer_information();
   })
 
   $("#cement-create-record #customer_name").autocomplete(autocompleteOptions);
@@ -411,7 +411,7 @@ jQuery(document).ready(function($){
     });
   }
 
-  var render_due_customer_information = function(){
+  var render_rod_due_customer_information = function(){
     var payment_type_due = check_rod_sell_payment_type_due();
 
     if(!payment_type_due){
@@ -426,7 +426,7 @@ jQuery(document).ready(function($){
       return false;
     }
 
-    render_due_customer_information();
+    render_rod_due_customer_information();
   });
 
   $(document).on('input', '#rod-sell-create-record #rate', function() {
@@ -434,7 +434,7 @@ jQuery(document).ready(function($){
       return false;
     }
 
-    render_due_customer_information();
+    render_rod_due_customer_information();
   });
 
   $(document).on('input', '#rod-sell-create-record #price', function() {
@@ -442,7 +442,7 @@ jQuery(document).ready(function($){
       return false;
     }
 
-    render_due_customer_information();
+    render_rod_due_customer_information();
   });
 
   $(document).on('submit', '#rod-sell-record-form', function(e) {
@@ -485,7 +485,7 @@ jQuery(document).ready(function($){
     $('#current-user-id').val('');
     $("#rod-sell-create-record #customer_name").val('');
 
-    render_due_customer_information();
+    render_rod_due_customer_information();
   })
 
   $("#rod-sell-create-record #customer_name").autocomplete(autocompleteOptions);

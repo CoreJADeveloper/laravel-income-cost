@@ -36,11 +36,18 @@ class DailyCost extends Model
    *
    */
   public function insert_daily_cost_record($data){
-    $dailyCost = new DailyCost([
-      'cost_type' => $data['cost_type'],
-      'amount' => $data['amount'],
-      'comment' => $data['comment']
-    ]);
+    if(isset($data['comment'])){
+      $dailyCost = new DailyCost([
+        'cost_type' => $data['cost_type'],
+        'amount' => $data['amount'],
+        'comment' => $data['comment']
+      ]);
+    } else {
+      $dailyCost = new DailyCost([
+        'cost_type' => $data['cost_type'],
+        'amount' => $data['amount']
+      ]);
+    }
 
     $dailyCost->save();
 
