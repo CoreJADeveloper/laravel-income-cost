@@ -18,6 +18,27 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <style>
+      body{
+        background-color: #fff;
+        font-size: 1.0rem;
+      }
+
+      .universal-div-layout{
+        margin: 5px 0;
+      }
+
+      .entry-submit-button{
+        min-width: 120px;
+        min-height: 50px;
+        font-size: 1.1rem;
+      }
+
+      #section-selection, #initial-selected-section, #selected-section-container{
+        margin: 10px 0;
+      }
+    </style>
 </head>
 <body>
     <div id="app">

@@ -50,7 +50,7 @@
       <div class="col-sm-2">
         <div class="form-group">
           <input type="hidden" id="current-user-id" name="current_user_id" value="" />
-          <input type="submit" id="save-customer-cost-record" class="btn btn-primary" value="Save" />
+          <input type="submit" id="save-customer-cost-record" class="btn btn-primary entry-submit-button" value="Save" />
         </div>
       </div>
       <div class="col-sm-6 invisible" id="customer-cost-record-success">
