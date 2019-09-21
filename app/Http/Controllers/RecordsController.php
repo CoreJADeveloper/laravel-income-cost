@@ -484,4 +484,16 @@ class RecordsController extends Controller
     return response()->json(['success'=> 'true']);
   }
 
+  public function get_customer_records($id){
+    $records = $this->customerEntityModel->get_existing_customer_records($id);
+
+    return view('customer.single')->with(['records' => $records]);
+  }
+
+  public function get_all_customers(){
+    $records = $this->customerModel->get_all_customers();
+
+    return view('customer.index')->with(['records' => $records]);
+  }
+
 }

@@ -31,10 +31,15 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::middleware(['auth'])->group(function () {
   Route::get('/brands', 'BrandsController@index');
   Route::get('/brands/create', 'BrandsController@create');
+  Route::get('/brands/{id}', 'BrandsController@get_brand_records');
   Route::post('/brands/store', 'BrandsController@store');
 
   Route::get('/records/create', 'RecordsController@create');
   Route::get('/records/autocomplete', 'RecordsController@autocomplete');
+
+  Route::get('/customers/', 'RecordsController@get_all_customers');
+  Route::get('/customers/{id}', 'RecordsController@get_customer_records');
+
   Route::post('/records/create/sell-cement', 'RecordsController@create_sell_cement_entities');
   Route::post('/records/create/sell-rod', 'RecordsController@create_sell_rod_entities');
   Route::post('/records/create/buy-cement', 'RecordsController@create_buy_cement_entities');

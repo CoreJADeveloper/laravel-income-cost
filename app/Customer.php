@@ -69,4 +69,15 @@ class Customer extends Model
             ->first();
     return $customer_information;
   }
+
+  public function get_all_customers(){
+    return DB::table('customers')
+    ->leftJoin('customer_entities', function($join) {
+        $join->on('customer_entities.customer_id', '=', 'customers.id')
+             ->on('customer_entities.id', '=',
+             DB::raw("(SELECT max(id) from customer_entities WHERE customer_entities.customer_id = customers.id)"));
+        })
+    ->select('customers.*', 'customer_entities.debit')
+    ->paginate(50);
+  }
 }

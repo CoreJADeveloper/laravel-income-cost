@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class CustomerEntity extends Model
 {
@@ -72,5 +73,15 @@ class CustomerEntity extends Model
     $customerEntity->save();
 
     return $customerEntity->id;
+  }
+
+  public function get_existing_customer_records($customer_id){
+    $customer_records = DB::table('customer_entities')
+            ->join('customers', 'customer_entities.customer_id', '=', 'customers.id')
+            ->select('customer_entities.*', 'customers.name',
+            'customers.mobile', 'customers.address')
+            ->where('customer_entities.customer_id', $customer_id)
+            ->paginate(50);
+    return $customer_records;
   }
 }

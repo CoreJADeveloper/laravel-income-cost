@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Brand;
+use App\BrandEntity;
 
 class BrandsController extends Controller
 {
   private $brandModel;
+  private $brandEntityModel;
 
   public function __construct(){
     $this->brandModel = new Brand();
+    $this->brandEntityModel =  new BrandEntity();
   }
 
   /**
@@ -52,5 +55,11 @@ class BrandsController extends Controller
 
     $this->brandModel->insert_brand_record($data);
     return redirect('/brands')->with('success', 'Brand saved!');
+  }
+
+  public function get_brand_records($id){
+    $records = $this->brandEntityModel->get_existing_brand_records($id);
+
+    return view('brand.single')->with(['records' => $records]);
   }
 }
