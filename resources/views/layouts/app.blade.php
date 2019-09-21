@@ -38,6 +38,23 @@
       #section-selection, #initial-selected-section, #selected-section-container{
         margin: 10px 0;
       }
+
+      .information-card .card{
+        margin: 10px 0 20px;
+        border: 0;
+      }
+
+      .information-card .report-print{
+        margin: 15px 0;
+      }
+
+      .information-card .report-print input{
+        min-width: 100px;
+      }
+
+      .final-record-card .card{
+        border: 0;
+      }
     </style>
 </head>
 <body>
