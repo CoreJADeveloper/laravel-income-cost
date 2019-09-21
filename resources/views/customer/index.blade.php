@@ -19,7 +19,7 @@
               <td><a href="{{ url('customers', ['id' => $record->id]) }}">{{$record->name}}</a></td>
               <td>{{$record->mobile}}</td>
               <td>{{$record->address}}</td>
-              <td>{{$record->debit}}</td>
+              <td>{{number_format((float)$record->debit, 2, '.', ',')}}</td>
           </tr>
           @endforeach
       </tbody>
