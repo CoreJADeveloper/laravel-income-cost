@@ -58,11 +58,14 @@ class Brand extends Model
    * @return Mixed
    */
   public function get_all_brands(){
-    $brandRecords = Brand::leftJoin('brand_entities', function($join) {
-        $join->on('brand_entities.brand_id', '=', 'brands.id')
-             ->on('brand_entities.id', '=',
-             DB::raw("(SELECT max(id) from brand_entities WHERE brand_entities.brand_id = brands.id)"));
-        })->paginate(50);
+    $brandRecords = DB::table('brands')
+              ->leftJoin('brand_entities', function($join) {
+                $join->on('brand_entities.brand_id', '=', 'brands.id')
+                     ->on('brand_entities.id', '=',
+                DB::raw("(SELECT max(id) from brand_entities WHERE brand_entities.brand_id = brands.id)"));
+              })
+              ->select('brands.*', 'brand_entities.debit')
+              ->paginate(50);
 
     return $brandRecords;
   }
